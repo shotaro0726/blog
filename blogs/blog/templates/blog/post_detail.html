@@ -15,4 +15,16 @@
     </div>
 </article>
 
+<a class="button is-success" href="{% url 'blog:comment_create' post.pk %}">
+    コメントしてみるー
+</a>
+
+<section class="section">
+    {% for comment in post.comment_set.all %}
+        <div class="box">
+            {{ comment | linebreaks | urlize }}
+        </div>
+    {% endfor %}
+</section>
+
 {% endblock %}
