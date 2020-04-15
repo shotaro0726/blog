@@ -1,12 +1,35 @@
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views import generic
-from .models import Post, Comment
-from .forms import CommentCreateForm
+from django.db.models import Q
+from .models import Post, Comment, Category, Tag
+from .forms import CommentCreateForm, PostSearchForm
 
 class PostList(generic.ListView):
     model = Post
     ordering = '-created_at'
+    paginate_by = 10
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        form = PostSearchForm(self.request.GET or None)
+        if form.is_valid():
+            key_word = form.cleaned_data.get('key_word')
+            if key_word:
+                queryset = queryset.filter(Q(title__icontains=key_word) | Q(text__icontains=key_word))
+            
+            category = form.cleaned_data.get('category')
+            if category:
+                queryset = queryset.filter(category=category)
+            
+            tags = form.cleaned_data.get('get')
+            if tags:
+                queryset = queryset.filter(tags__in=tags).distinct()
+            
+            user = form.cleaned_data.get('user')
+            if user:
+                queryset = queryset.filter(writer=user)
+        return queryset
 
 class PostDetail(generic.DetailView):
     model = Post
@@ -22,3 +45,21 @@ class CommentCreate(generic.CreateView):
         comment.target = post
         comment.save()
         return redirect('blog:post_detail', pk=post_pk)
+
+class PostCategoryList(generic.ListView):
+    model = Post
+    ordering = '-created_at'
+    paginate_by = 10
+
+    def get_queryset(self):
+        category = get_object_or_404(Category, pk=self.kwargs['pk'])
+        return super().get_queryset().filter(category=category)
+
+class PostTaglist(generic.ListView):
+    model = Post
+    ordering = '-created_at'
+    paginate_by = 10
+
+    def get_queryset(self):
+        tag = get_object_or_404(Tag, pk=self.kwargs['pk'])
+        return super().get_queryset().filter(tags=tag)
