@@ -21,7 +21,7 @@ class PostList(generic.ListView):
             category = form.cleaned_data.get('category')
             if category:
                 queryset = queryset.filter(category=category)
-            
+             
             tags = form.cleaned_data.get('get')
             if tags:
                 queryset = queryset.filter(tags__in=tags).distinct()
