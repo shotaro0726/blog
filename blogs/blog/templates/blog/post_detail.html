@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load blog %}
 {% block content %}
 
 <article class="box">
@@ -22,7 +22,7 @@
 <section class="section">
     {% for comment in post.comment_set.all %}
         <div class="box">
-            {{ comment | linebreaks | urlize }}
+            {{ comment | linebreaks | urlize  }}
         </div>
     {% endfor %}
 </section>

@@ -1,9 +1,9 @@
 {% load blog %}
 
 <nav class="pagination is-centered" role="navigation" aria-label="pagination">
-{% if page_obj.has_previous %}
+<!-- {% if page_obj.has_previous %}
 <a class="pagination-previous" href="?{% url_replace request 'page' page_obj.previous_page_number %}">Forward</a>
-{% endif %}
+{% endif %} -->
 
 <ul class="pagination-list">
 {% for num in page_obj.paginator.page_range %}
@@ -15,7 +15,7 @@
 {% endfor %}
 </ul>
 
-{% if page_obj.has_next %}
-<a  class="pagination-next" href="?{% url_replace request 'page' page_obj.next_page_number %}">Next</a>
-{% endif %}
+<!-- {% if page_obj.has_next %}
+<a  class="pagination-next text-center" href="?{% url_replace request 'page' page_obj.next_page_number %}">Next</a>
+{% endif %} -->
 </nav>

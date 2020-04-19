@@ -25,10 +25,6 @@ class PostList(generic.ListView):
             tags = form.cleaned_data.get('get')
             if tags:
                 queryset = queryset.filter(tags__in=tags).distinct()
-            
-            user = form.cleaned_data.get('user')
-            if user:
-                queryset = queryset.filter(writer=user)
         return queryset
 
 class PostDetail(generic.DetailView):
